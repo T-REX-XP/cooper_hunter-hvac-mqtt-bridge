@@ -13,11 +13,11 @@ module.exports = {
     mode: {
         code: 'runMode',
         value: {
-            auto: "000",
-            cool: "001",
-            dry: "010",
-            wind: "011",
-            heat: "100",
+            auto: '000',
+            cool: '001',
+            dry: '010',
+            wind: '011',
+            heat: '100'
         }
     },
     // temperature unit (must be together with set temperature)
@@ -30,11 +30,11 @@ module.exports = {
     },
     // set temperature (must be together with temperature unit)
     temperature: {
-        code: 'indoorTemperature' //SetTem
+        code: 'indoorTemperature'
     },
     // fan speed
     fanSpeed: {
-        code: 'windMode', //WdSpd
+        code: 'windMode',
         value: {
             auto: 0, //fan auto
             low: 1, //1
@@ -48,14 +48,16 @@ module.exports = {
         }
     },
     // fresh air valve
-    airVale: {
+    air: {
         code: 'Air',
         value: {
             off: 0,
-            on: 1
+            inside: 1,
+            outside: 2,
+            mode3: 3
         }
     },
-    // "Blow" or "X-Fan", this function keeps the fan running for a while after shutting down. Only usable in Dry and Cool mode
+    // keeps the fan running for a while after shutting down (also called "X-Fan", only usable in Dry and Cool mode)
     blow: {
         code: 'Blo',
         value: {
@@ -65,7 +67,7 @@ module.exports = {
     },
     // controls Health ("Cold plasma") mode, only for devices equipped with "anion generator", which absorbs dust and kills bacteria
     health: {
-        code: 'healthy', //Health
+        code: 'healthy',
         value: {
             off: 0,
             on: 1
@@ -91,8 +93,14 @@ module.exports = {
     swingHor: {
         code: 'SwingLfRig',
         value: {
-            default: 0
-                // TODO: remaining values
+            default: 0,
+            //full: 1, // swing in full range
+            fixedLeft: 2, // fixed in leftmost position (1/5)
+            fixedMidLeft: 3, // fixed in middle-left postion (2/5)
+            fixedMid: 4, // fixed in middle position (3/5)
+            fixedMidRight: 5, // fixed in middle-right postion (4/5)
+            fixedRight: 6, // fixed in rightmost position (5/5)
+            full: 7 // swing in full range (seems to be same as full)
         }
     },
     // controls the swing mode of the vertical air blades
@@ -118,7 +126,9 @@ module.exports = {
         code: 'Quiet',
         value: {
             off: 0,
-            on: 1
+            mode1: 1,
+            mode2: 2,
+            mode3: 3
         }
     },
     // sets fan speed to the maximum. Fan speed cannot be changed while active and only available in Dry and Cool mode
