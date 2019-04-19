@@ -1,16 +1,8 @@
 'use strict';
-const net = require('net');
 const dgram = require('dgram');
 const socket = dgram.createSocket('udp4');
-const encryptionService = require('./encryptionService')();
+//const encryptionService = require('./encryptionService')();
 const cmd = require('./commandEnums');
-const _ = require('lodash');
-
-const utils = require("./utils");
-
-const client = new net.Socket();
-
-
 
 /**
  * Class representing a single connected device
@@ -30,16 +22,11 @@ class Device {
         //  Set defaults
         this.options = {
             host: options.host || '192.168.111.255',
-            onStatus: options.onStatus || function() {},
-            onUpdate: options.onUpdate || function() {},
-            onConnected: options.onConnected || function() {}
-        };
-        client.on('data', (msg, rinfo) => this._handleResponse(msg, rinfo));
+            onStatus: options.onStatus || function () {},
+            onUpdate: options.onUpdate || function () {},
+            onConnected: options.onConnected || function () {}
+        }
 
-        client.on('listening', () => {
-            const address = client.address();
-            console.log(`server listening ${address.address}:${address.port}`);
-        });
         /**
          * Device object
          * @typedef {object} Device
@@ -51,11 +38,11 @@ class Device {
          * @property {object} props - Properties
          */
         this.device = {};
-        //
+
         this.defaultPort = 12414;
         this.defaultDiscoveryPort = 2415;
-        this.deviceStatusPort = 12416
-            // Initialize connection and bind with device
+        this.deviceStatusPort = 12416;
+        // Initialize connection and bind with device
         this._connectToDevice(this.options.host);
 
         // Handle incoming messages
@@ -86,7 +73,7 @@ class Device {
                 console.log('[UDP] Connected to device at %s', address);
             });
         } catch (err) {
-            const timeout = 60
+            const timeout = 60;
 
             console.log('[UDP] Unable to connect (' + err.message + '). Retrying in ' + timeout + 's...');
             setTimeout(() => {
@@ -118,21 +105,22 @@ class Device {
      * @param {Device} device Device object
      */
     _sendBindRequest(device) {
-        /*const message = {
-            mac: this.device.id,
-            t: 'bind',
-            uid: 0
-        };
-        const encryptedBoundMessage = encryptionService.encrypt(message);
-        const request = {
-            cid: 'app',
-            i: 1,
-            t: 'pack',
-            uid: 0,
-            pack: encryptedBoundMessage
-        };
-        const toSend = new Buffer(JSON.stringify(request));
-        socket.send(toSend, 0, toSend.length, device.port, device.address);*/
+        /*   const message = {
+               mac: this.device.id,
+               t: 'bind',
+               uid: 0
+           };
+           const encryptedBoundMessage = encryptionService.encrypt(message);
+           const request = {
+               cid: 'app',
+               i: 1,
+               t: 'pack',
+               uid: 0,
+               pack: encryptedBoundMessage
+           };
+           const toSend = Buffer.from(JSON.stringify(request));
+           socket.send(toSend, 0, toSend.length, device.port, device.address);
+           */
     }
 
     /**
@@ -141,21 +129,21 @@ class Device {
      * @param {String} key - Encryption key
      */
     _confirmBinding(id, key) {
-        /*  this.device.bound = true;
-          this.device.key = key;
-          console.log('[UDP] Device %s is bound!', this.device.name);*/
+        /*this.device.bound = true;
+        this.device.key = key;
+        console.log('[UDP] Device %s is bound!', this.device.name);*/
     }
 
     /**
      * Confirm device is bound and update device status on list
      * @param {Device} device - Device
      */
-    _requestDeviceStatus(device, that) {
+    _requestDeviceStatus(device) {
         console.log("--in _requestDeviceStatus");
         let serializedRequest = new Buffer([0xAA, 0xAA, 0x12, 0xA0, 0x0A, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1A]);
 
         if (!this.isConnected) {
-            client.connect(this.deviceStatusPort, device.address, function(data) {
+            client.connect(this.deviceStatusPort, device.address, function (data) {
                 console.log('Connected to tcp port');
                 this.isConnected = true;
                 client.write(serializedRequest);
@@ -164,8 +152,6 @@ class Device {
             console.log("-- already connected");
             client.write(serializedRequest);
         }
-
-        // socket.send(serializedRequest, 0, serializedRequest.length, device.port, device.ip);
     }
 
     /**
@@ -184,6 +170,7 @@ class Device {
             this._requestDeviceStatus(this.device, this);
             this.options.onConnected(this.device);
             // this._sendBindRequest(this.device);
+            return;
         } else {
             console.log("received status msg.");
             let statusMessage = utils.parseMessage(msg);
@@ -191,7 +178,10 @@ class Device {
             this.device.lastCmd = msg;
             this.device.props = statusMessage;
             this.options.onStatus(this.device);
+            return;
         }
+
+        console.log('[UDP] Unknown message of type %s: %s, %s', pack.t, message, pack);
     }
 
     /**
@@ -200,12 +190,12 @@ class Device {
      * @param {number[]} values List of values
      */
     _sendCommand(commands = [], values = []) {
-        /*   const message = {
-               opt: commands,
-               p: values,
-               t: 'cmd'
-           };
-           this._sendRequest(message);*/
+        /* const message = {
+             opt: commands,
+             p: values,
+             t: 'cmd'
+         };
+         this._sendRequest(message);*/
     };
 
     /**
@@ -217,7 +207,18 @@ class Device {
      * @param {string} [address] IP/host address
      * @param {number} [port] Port number
      */
-    _sendRequest(message, address = this.device.address, port = this.device.port) {};
+    _sendRequest(message, address = this.device.address, port = this.device.port) {
+        /*  const encryptedMessage = encryptionService.encrypt(message, this.device.key);
+          const request = {
+              cid: 'app',
+              i: 0,
+              t: 'pack',
+              uid: 0,
+              pack: encryptedMessage
+          };
+          const serializedRequest = Buffer.from(JSON.stringify(request));
+          socket.send(serializedRequest, 0, serializedRequest.length, port, address);*/
+    };
 
     /**
      * Turn on/off
@@ -227,7 +228,7 @@ class Device {
         console.log('--In setPower: ' + value);
         if (this.device.lastCmd)
             client.write(utils.cmd01(this.device.lastCmd, value));
-    };
+    }
 
     /**
      * Set temperature
@@ -238,40 +239,152 @@ class Device {
         console.log('--In setTemp: ' + value);
         if (this.device.lastCmd)
             client.write(utils.cmd07(this.device.lastCmd, value, false));
-
-    };
+    }
 
     /**
      * Set mode
      * @param {number} value Mode value (0-4)
      */
     setMode(value) {
+        console.log('--In setMode: ' + value);
         this._sendCommand(
             [cmd.mode.code], [value]
         );
-    };
+    }
 
     /**
      * Set fan speed
      * @param {number} value Fan speed value (0-5)
      */
     setFanSpeed(value) {
+        console.log('--In setFanSpeed: ' + value);
         this._sendCommand(
-            [cmd.fanSpeed.code], [value]
+            [cmd.fanSpeed.code],
+            [value]
         );
-    };
+    }
+
+    /** 
+     * Set horizontal swing
+     * @param {number} value Horizontal swing value (0-7)
+     */
+    setSwingHor(value) {
+        console.log('--In setSwingHor: ' + value);
+        this._sendCommand(
+            [cmd.swingHor.code],
+            [value]
+        );
+    }
 
     /**
      * Set vertical swing
      * @param {number} value Vertical swing value (0-11)
      */
     setSwingVert(value) {
+        console.log('--In setSwingVert: ' + value);
         this._sendCommand(
-            [cmd.swingVert.code], [value]
+            [cmd.swingVert.code],
+            [value]
         );
-    };
-};
+    }
 
-module.exports.connect = function(options) {
+    /**
+     * Set power save mode
+     * @param {boolean} value on/off
+     */
+    setPowerSave(value) {
+        console.log('--In setPowerSave: ' + value);
+        this._sendCommand(
+            [cmd.energySave.code],
+            [value ? 1 : 0]
+        );
+    }
+
+    /**
+     * Set lights on/off
+     * @param {boolean} value on/off
+     */
+    setLights(value) {
+        console.log('--In setLights: ' + value);
+        this._sendCommand(
+            [cmd.lights.code],
+            [value ? 1 : 0]
+        );
+    }
+
+    /**
+     * Set health mode
+     * @param {boolean} value on/off
+     */
+    setHealthMode(value) {
+        console.log('--In setLights: ' + value);
+        this._sendCommand(
+            [cmd.health.code],
+            [value ? 1 : 0]
+        );
+    }
+
+    /**
+     * Set quiet mode
+     * @param {boolean} value on/off
+     */
+    setQuietMode(value) {
+        console.log('--In setQuietMode: ' + value);
+        this._sendCommand(
+            [cmd.quiet.code],
+            [value]
+        );
+    }
+
+    /**
+     * Set blow mode
+     * @param {boolean} value on/off
+     */
+    setBlow(value) {
+        console.log('--In setBlow: ' + value);
+        this._sendCommand(
+            [cmd.blow.code],
+            [value ? 1 : 0]
+        );
+    }
+
+    /**
+     * Set air valve mode
+     * @param {boolean} value on/off
+     */
+    setAir(value) {
+        console.log('--In setAir: ' + value);
+        this._sendCommand(
+            [cmd.air.code],
+            [value]
+        );
+    }
+
+    /**
+     * Set sleep mode
+     * @param {boolean} value on/off
+     */
+    setSleepMode(value) {
+        console.log('--In setSleepMode: ' + value);
+        this._sendCommand(
+            [cmd.sleep.code],
+            [value ? 1 : 0]
+        );
+    }
+
+    /**
+     * Set turbo mode
+     * @param {boolean} value on/off
+     */
+    setTurbo(value) {
+        console.log('--In setTurbo: ' + value);
+        this._sendCommand(
+            [cmd.turbo.code],
+            [value ? 1 : 0]
+        );
+    }
+}
+
+module.exports.connect = function (options) {
     return new Device(options);
 };
