@@ -122,6 +122,8 @@ climate:
 
 
 ## Changelog
+[1.1.2.1] - Updated sources from orig 
+
 [1.0.3] - Fixed power off command
 
 [1.0.2] - Fixed modes and WindModes
