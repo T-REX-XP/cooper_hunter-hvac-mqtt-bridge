@@ -28,7 +28,8 @@ module.exports = {
             cool: '001',
             dry: '010',
             wind: '011',
-            heat: '100'
+            heat: '100',
+            mode101: '101'
         }
     },
     // temperature unit (must be together with set temperature)

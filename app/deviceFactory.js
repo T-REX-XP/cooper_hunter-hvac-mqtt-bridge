@@ -202,13 +202,8 @@ class Device {
      * @param {string[]} commands List of commands
      * @param {number[]} values List of values
      */
-    _sendCommand(commands = [], values = []) {
-        /* const message = {
-               opt: commands,
-               p: values,
-               t: 'cmd'
-           };
-           this._sendRequest(message);*/
+    _sendCommand(command) {
+        client.write(command);
     };
 
     /**
@@ -240,7 +235,7 @@ class Device {
     setPower(value) {
         console.log('--In setPower: ' + value);
         if (this.device.lastCmd)
-            client.write(utils.cmd01(this.device.lastCmd, value));
+            this._sendCommand(utils.cmd01(this.device.lastCmd, value));
     };
 
     /**
@@ -251,7 +246,7 @@ class Device {
     setTemp(value, unit = cmd.temperatureUnit.value.celsius) {
         console.log('--In setTemp: ' + value);
         if (this.device.lastCmd)
-            client.write(utils.cmd07(this.device.lastCmd, value, false));
+            this._sendCommand(utils.cmd07(this.device.lastCmd, value, false));
 
     };
 
@@ -261,7 +256,7 @@ class Device {
      */
     setMode(value) {
         console.log('--In setMode: ' + value);
-        client.write(utils.cmd05(this.device.lastCmd, value));
+        this._sendCommand(utils.cmd05(this.device.lastCmd, value));
         //this._sendCommand(
         //  [cmd.mode.code], [value]
         //);
@@ -273,9 +268,7 @@ class Device {
      */
     setFanSpeed(value) {
         console.log('--In setFanSpeed: ' + value);
-        this._sendCommand(
-            [cmd.fanSpeed.code], [value]
-        );
+        this._sendCommand(utils.cmd03(this.device.lastCmd, value));
     };
 
     /** 
@@ -307,9 +300,9 @@ class Device {
      */
     setPowerSave(value) {
         console.log('--In setPowerSave: ' + value);
-        this._sendCommand(
-            [cmd.energySave.code], [value ? 1 : 0]
-        );
+        /*  this._sendCommand(
+              [cmd.energySave.code], [value ? 1 : 0]
+          );*/
     }
 
     /**
@@ -318,9 +311,7 @@ class Device {
      */
     setLights(value) {
         console.log('--In setLights: ' + value);
-        this._sendCommand(
-            [cmd.lights.code], [value ? 1 : 0]
-        );
+        this._sendCommand(utils.cmd11(this.device.lastCmd, value ? 1 : 0));
     }
 
     /**
@@ -329,9 +320,10 @@ class Device {
      */
     setHealthMode(value) {
         console.log('--In setLights: ' + value);
-        this._sendCommand(
-            [cmd.health.code], [value ? 1 : 0]
-        );
+        /* this._sendCommand(
+             [cmd.health.code], [value ? 1 : 0]
+         );
+         */
     }
 
     /**
@@ -340,9 +332,10 @@ class Device {
      */
     setQuietMode(value) {
         console.log('--In setQuietMode: ' + value);
-        this._sendCommand(
-            [cmd.quiet.code], [value]
-        );
+        /*  this._sendCommand(
+              [cmd.quiet.code], [value]
+          );
+          */
     }
 
     /**
@@ -351,9 +344,10 @@ class Device {
      */
     setBlow(value) {
         console.log('--In setBlow: ' + value);
-        this._sendCommand(
-            [cmd.blow.code], [value ? 1 : 0]
-        );
+        /* this._sendCommand(
+             [cmd.blow.code], [value ? 1 : 0]
+         );
+         */
     }
 
     /**
@@ -362,9 +356,10 @@ class Device {
      */
     setAir(value) {
         console.log('--In setAir: ' + value);
-        this._sendCommand(
-            [cmd.air.code], [value]
-        );
+        /*  this._sendCommand(
+              [cmd.air.code], [value]
+          );
+          */
     }
 
     /**
@@ -373,9 +368,10 @@ class Device {
      */
     setSleepMode(value) {
         console.log('--In setSleepMode: ' + value);
-        this._sendCommand(
-            [cmd.sleep.code], [value ? 1 : 0]
-        );
+        /*   this._sendCommand(
+               [cmd.sleep.code], [value ? 1 : 0]
+           );
+           */
     }
 
     /**
@@ -384,9 +380,10 @@ class Device {
      */
     setTurbo(value) {
         console.log('--In setTurbo: ' + value);
-        this._sendCommand(
-            [cmd.turbo.code], [value ? 1 : 0]
-        );
+        /*   this._sendCommand(
+               [cmd.turbo.code], [value ? 1 : 0]
+           );
+           */
     }
 }
 

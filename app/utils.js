@@ -294,7 +294,7 @@ module.exports = {
         cmdCom[cmdCom.length - 1] = code & 0xFF;
         return cmdCom;
     },
-
+    //this._sendAction(utils.cmd01(this.lastCmd, this.devStatus.boot ? 0 : 1))
     cmd01: function(nowCmd, val) {
         let cmdPos = 4 + 3;
         let byte = nowCmd[cmdPos];
@@ -434,7 +434,7 @@ module.exports = {
         return !modify ? this.cmd(nowCmd) : nowCmd;
     },
 
-
+    //mute
     cmd06: function(nowCmd, val, modify = false) {
         let cmdPos = 4 + 4;
         let byte = nowCmd[cmdPos];
@@ -449,7 +449,7 @@ module.exports = {
 
         return !modify ? this.cmd(nowCmd) : nowCmd;
     },
-
+    //wenduEnabledChange
     cmd08: function(nowCmd, val, modify = false) {
         let cmdPos = 4 + 4;
         let byte = nowCmd[cmdPos];
@@ -483,7 +483,7 @@ module.exports = {
 
         return !modify ? this.cmd(nowCmd) : nowCmd;
     },
-
+    //windLR
     cmd09: function(nowCmd, val, modify = false) {
 
         val = typeof val === 'number' ? _.padStart(val.toString(2), 4, '0') : val;
@@ -499,7 +499,7 @@ module.exports = {
 
         return !modify ? this.cmd(nowCmd) : nowCmd;
     },
-
+    //windTB
     cmd10: function(nowCmd, val, modify = false) {
         val = typeof val === 'number' ? _.padStart(val.toString(2), 4, '0') : val;
 
@@ -514,7 +514,8 @@ module.exports = {
 
         return !modify ? this.cmd(nowCmd) : nowCmd;
     },
-
+    //lightEnabledChange
+    //setLights
     cmd11: function(nowCmd, val, modify = false) {
         let cmdPos = 4 + 6;
         let byte = nowCmd[cmdPos];
@@ -524,7 +525,7 @@ module.exports = {
 
         return !modify ? this.cmd(nowCmd) : nowCmd;
     },
-
+    //jkEnabledChange
     cmd12: function(nowCmd, val, modify = false) {
         let cmdPos = 4 + 6;
 
@@ -545,7 +546,7 @@ module.exports = {
 
         return !modify ? this.cmd(nowCmd) : nowCmd;
     },
-
+    //ganzaoEnabledChange
     cmd14: function(nowCmd, val, modify = false) {
         let cmdPos = 4 + 6;
         let byte = nowCmd[cmdPos]
@@ -566,7 +567,7 @@ module.exports = {
 
         return !modify ? cmd(nowCmd) : nowCmd;
     },
-
+    //sleepEnabledChange
     cmd16: function(nowCmd, val, modify = false) {
         let cmdPos = 4 + 6;
         let byte = nowCmd[cmdPos];
@@ -595,7 +596,8 @@ module.exports = {
 
         return !modify ? this.cmd(nowCmd) : nowCmd;
     },
-
+    //shutdown
+    //    this._sendAction(utils.cmd18(this.lastCmd, val, this.devStatus.bootTime, this.devStatus.shutEnabled, this.devStatus.shutTime, ))
     cmd18: function(nowCmd, bootEnabled, bootTime, shutEnabled, shutTime, modify = false) {
         let _bootTime = bootTime.split(':');
         let booSec = parseInt(_bootTime[0]) * 60 + parseInt(_bootTime[1]);
