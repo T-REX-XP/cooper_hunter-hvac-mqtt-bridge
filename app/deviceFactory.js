@@ -1,8 +1,16 @@
 'use strict';
+const net = require('net');
 const dgram = require('dgram');
 const socket = dgram.createSocket('udp4');
 //const encryptionService = require('./encryptionService')();
 const cmd = require('./commandEnums');
+const _ = require('lodash');
+
+const utils = require("./utils");
+
+const client = new net.Socket();
+
+
 
 /**
  * Class representing a single connected device
@@ -22,11 +30,16 @@ class Device {
         //  Set defaults
         this.options = {
             host: options.host || '192.168.111.255',
-            onStatus: options.onStatus || function () {},
-            onUpdate: options.onUpdate || function () {},
-            onConnected: options.onConnected || function () {}
-        }
+            onStatus: options.onStatus || function() {},
+            onUpdate: options.onUpdate || function() {},
+            onConnected: options.onConnected || function() {}
+        };
+        client.on('data', (msg, rinfo) => this._handleResponse(msg, rinfo));
 
+        client.on('listening', () => {
+            const address = client.address();
+            console.log(`server listening ${address.address}:${address.port}`);
+        });
         /**
          * Device object
          * @typedef {object} Device
@@ -106,21 +119,21 @@ class Device {
      */
     _sendBindRequest(device) {
         /*   const message = {
-               mac: this.device.id,
-               t: 'bind',
-               uid: 0
-           };
-           const encryptedBoundMessage = encryptionService.encrypt(message);
-           const request = {
-               cid: 'app',
-               i: 1,
-               t: 'pack',
-               uid: 0,
-               pack: encryptedBoundMessage
-           };
-           const toSend = Buffer.from(JSON.stringify(request));
-           socket.send(toSend, 0, toSend.length, device.port, device.address);
-           */
+            mac: this.device.id,
+            t: 'bind',
+            uid: 0
+        };
+        const encryptedBoundMessage = encryptionService.encrypt(message);
+        const request = {
+            cid: 'app',
+            i: 1,
+            t: 'pack',
+            uid: 0,
+            pack: encryptedBoundMessage
+        };
+        const toSend = Buffer.from(JSON.stringify(request));
+        socket.send(toSend, 0, toSend.length, device.port, device.address);
+        */
     }
 
     /**
@@ -130,8 +143,8 @@ class Device {
      */
     _confirmBinding(id, key) {
         /*this.device.bound = true;
-        this.device.key = key;
-        console.log('[UDP] Device %s is bound!', this.device.name);*/
+          this.device.key = key;
+          console.log('[UDP] Device %s is bound!', this.device.name);*/
     }
 
     /**
@@ -140,10 +153,10 @@ class Device {
      */
     _requestDeviceStatus(device) {
         console.log("--in _requestDeviceStatus");
-        let serializedRequest = new Buffer([0xAA, 0xAA, 0x12, 0xA0, 0x0A, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1A]);
+        let serializedRequest = Buffer.from([0xAA, 0xAA, 0x12, 0xA0, 0x0A, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1A]);
 
         if (!this.isConnected) {
-            client.connect(this.deviceStatusPort, device.address, function (data) {
+            client.connect(this.deviceStatusPort, device.address, function(data) {
                 console.log('Connected to tcp port');
                 this.isConnected = true;
                 client.write(serializedRequest);
@@ -191,11 +204,11 @@ class Device {
      */
     _sendCommand(commands = [], values = []) {
         /* const message = {
-             opt: commands,
-             p: values,
-             t: 'cmd'
-         };
-         this._sendRequest(message);*/
+               opt: commands,
+               p: values,
+               t: 'cmd'
+           };
+           this._sendRequest(message);*/
     };
 
     /**
@@ -228,7 +241,7 @@ class Device {
         console.log('--In setPower: ' + value);
         if (this.device.lastCmd)
             client.write(utils.cmd01(this.device.lastCmd, value));
-    }
+    };
 
     /**
      * Set temperature
@@ -239,7 +252,8 @@ class Device {
         console.log('--In setTemp: ' + value);
         if (this.device.lastCmd)
             client.write(utils.cmd07(this.device.lastCmd, value, false));
-    }
+
+    };
 
     /**
      * Set mode
@@ -250,7 +264,7 @@ class Device {
         this._sendCommand(
             [cmd.mode.code], [value]
         );
-    }
+    };
 
     /**
      * Set fan speed
@@ -259,10 +273,9 @@ class Device {
     setFanSpeed(value) {
         console.log('--In setFanSpeed: ' + value);
         this._sendCommand(
-            [cmd.fanSpeed.code],
-            [value]
+            [cmd.fanSpeed.code], [value]
         );
-    }
+    };
 
     /** 
      * Set horizontal swing
@@ -271,8 +284,7 @@ class Device {
     setSwingHor(value) {
         console.log('--In setSwingHor: ' + value);
         this._sendCommand(
-            [cmd.swingHor.code],
-            [value]
+            [cmd.swingHor.code], [value]
         );
     }
 
@@ -283,10 +295,10 @@ class Device {
     setSwingVert(value) {
         console.log('--In setSwingVert: ' + value);
         this._sendCommand(
-            [cmd.swingVert.code],
-            [value]
+            [cmd.swingVert.code], [value]
         );
-    }
+    };
+
 
     /**
      * Set power save mode
@@ -295,8 +307,7 @@ class Device {
     setPowerSave(value) {
         console.log('--In setPowerSave: ' + value);
         this._sendCommand(
-            [cmd.energySave.code],
-            [value ? 1 : 0]
+            [cmd.energySave.code], [value ? 1 : 0]
         );
     }
 
@@ -307,8 +318,7 @@ class Device {
     setLights(value) {
         console.log('--In setLights: ' + value);
         this._sendCommand(
-            [cmd.lights.code],
-            [value ? 1 : 0]
+            [cmd.lights.code], [value ? 1 : 0]
         );
     }
 
@@ -319,8 +329,7 @@ class Device {
     setHealthMode(value) {
         console.log('--In setLights: ' + value);
         this._sendCommand(
-            [cmd.health.code],
-            [value ? 1 : 0]
+            [cmd.health.code], [value ? 1 : 0]
         );
     }
 
@@ -331,8 +340,7 @@ class Device {
     setQuietMode(value) {
         console.log('--In setQuietMode: ' + value);
         this._sendCommand(
-            [cmd.quiet.code],
-            [value]
+            [cmd.quiet.code], [value]
         );
     }
 
@@ -343,8 +351,7 @@ class Device {
     setBlow(value) {
         console.log('--In setBlow: ' + value);
         this._sendCommand(
-            [cmd.blow.code],
-            [value ? 1 : 0]
+            [cmd.blow.code], [value ? 1 : 0]
         );
     }
 
@@ -355,8 +362,7 @@ class Device {
     setAir(value) {
         console.log('--In setAir: ' + value);
         this._sendCommand(
-            [cmd.air.code],
-            [value]
+            [cmd.air.code], [value]
         );
     }
 
@@ -367,8 +373,7 @@ class Device {
     setSleepMode(value) {
         console.log('--In setSleepMode: ' + value);
         this._sendCommand(
-            [cmd.sleep.code],
-            [value ? 1 : 0]
+            [cmd.sleep.code], [value ? 1 : 0]
         );
     }
 
@@ -379,12 +384,11 @@ class Device {
     setTurbo(value) {
         console.log('--In setTurbo: ' + value);
         this._sendCommand(
-            [cmd.turbo.code],
-            [value ? 1 : 0]
+            [cmd.turbo.code], [value ? 1 : 0]
         );
     }
 }
 
-module.exports.connect = function (options) {
+module.exports.connect = function(options) {
     return new Device(options);
 };
