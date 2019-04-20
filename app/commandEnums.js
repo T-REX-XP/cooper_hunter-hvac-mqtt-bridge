@@ -1,5 +1,9 @@
 'use strict';
 
+//export const CMD_OWN_SERACH = 0xA0;
+
+//export const CMD_CTRL = 0x01;
+
 module.exports = {
     // power state of the device
     power: {
@@ -10,6 +14,13 @@ module.exports = {
         }
     },
     // mode of operation
+    /*
+    '000': $t('glb.page.deviceCtrl.runMode.auto'),
+    '001': $t('glb.page.deviceCtrl.runMode.cool'),
+    '010': $t('glb.page.deviceCtrl.runMode.chushi'),
+    '011': $t('glb.page.deviceCtrl.runMode.wind'),
+    '100': $t('glb.page.deviceCtrl.runMode.hot'), 
+    */
     mode: {
         code: 'runMode',
         value: {
@@ -33,18 +44,25 @@ module.exports = {
         code: 'indoorTemperature'
     },
     // fan speed
+    /**
+    '000': $t('glb.page.deviceCtrl.windLevel.l0'),
+    '001': $t('glb.page.deviceCtrl.windLevel.l1'),
+    '010': $t('glb.page.deviceCtrl.windLevel.l2'),
+    '011': $t('glb.page.deviceCtrl.windLevel.l3'),
+    '100': $t('glb.page.deviceCtrl.windLevel.l4'),
+    '101': $t('glb.page.deviceCtrl.windLevel.l5'),
+    '110': $t('glb.page.deviceCtrl.windLevel.l6'),
+     */
     fanSpeed: {
-        code: 'windMode',
+        code: 'windLevel',
         value: {
-            auto: 0, //fan auto
-            low: 1, //1
-            low1: 2,
-            low2: 3,
-            low3: 4,
-            medium: 5, //fan
-            mediumLow: 6, //step less
-            mediumHigh: 7, //quite //1 // not available on 3-speed units
-            high: 8 //turbo
+            l0: '000',
+            l1: '001',
+            l2: '010',
+            l3: '011',
+            l4: '100',
+            l5: '101',
+            l6: '110',
         }
     },
     // fresh air valve

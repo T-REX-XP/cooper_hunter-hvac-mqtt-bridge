@@ -261,9 +261,10 @@ class Device {
      */
     setMode(value) {
         console.log('--In setMode: ' + value);
-        this._sendCommand(
-            [cmd.mode.code], [value]
-        );
+        client.write(utils.cmd05(this.device.lastCmd, value));
+        //this._sendCommand(
+        //  [cmd.mode.code], [value]
+        //);
     };
 
     /**

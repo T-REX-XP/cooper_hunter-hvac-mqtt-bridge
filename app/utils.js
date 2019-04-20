@@ -330,7 +330,7 @@ module.exports = {
 
         return !modify ? this.cmd(nowCmd) : nowCmd;
     },
-
+    //wind level
     cmd03: function(nowCmd, val, modify = false) {
         let _val = val;
         val = typeof val === 'number' ? _.padStart(val.toString(2), 3, '0') : val;
@@ -354,7 +354,7 @@ module.exports = {
 
         return !modify ? this.cmd(nowCmd) : nowCmd;
     },
-
+    //changeWujiNu
     cmd04: function(nowCmd, val, modify = false) {
         val = _.padStart(val.toString(2), 8, '0');
 
@@ -363,7 +363,7 @@ module.exports = {
 
         return !modify ? this.cmd(nowCmd) : nowCmd;
     },
-
+    //setMode
     cmd05: function(nowCmd, val, wdNumber = 0, windLevel = -1, wujiNum = -1, windLR = -1, windTB = -1, modify = false) {
         val = typeof val === 'number' ? _.padStart(val.toString(2), 3, '0') : val;
 
@@ -460,7 +460,7 @@ module.exports = {
         return !modify ? this.cmd(nowCmd) : nowCmd;
     },
 
-
+    //wdNumberwd
     cmd07: function(nowCmd, val, modify = false) {
         let cmdPos = 4 + 4;
         let tempSt = this.parseData4(nowCmd[cmdPos]);

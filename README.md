@@ -104,15 +104,14 @@ climate:
       - swingMidTop
       - swingTop
     fan_modes:
-      - auto
-      - low
-      - low1
-      - low2
-      - low3
-      - medium
-      - mediumLow
-      - mediumHigh
-      - high
+      - l0
+      - l1
+      - l2
+      - l3
+      - l4
+      - l5
+      - l6
+
 ```
 
 ## Configuring HVAC WiFi

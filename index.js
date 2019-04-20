@@ -36,7 +36,7 @@ const deviceOptions = {
         client.publish(mqttTopicPrefix + '/power/get', commands.power.value.getKeyByValue(deviceModel.props[commands.power.code]).toString());
         client.publish(mqttTopicPrefix + '/health/get', commands.health.value.getKeyByValue(deviceModel.props[commands.health.code]).toString());
         client.publish(mqttTopicPrefix + '/powersave/get', commands.energySave.value.getKeyByValue(deviceModel.props[commands.energySave.code]).toString());
-        //client.publish(mqttTopicPrefix + '/lights/get', commands.lights.value.getKeyByValue(deviceModel.props[commands.lights.code]).toString());
+        client.publish(mqttTopicPrefix + '/lights/get', commands.lights.value.getKeyByValue(deviceModel.props[commands.lights.code]).toString());
         //client.publish(mqttTopicPrefix + '/quiet/get', commands.quiet.value.getKeyByValue(deviceModel.props[commands.quiet.code]).toString());
         //client.publish(mqttTopicPrefix + '/blow/get', commands.blow.value.getKeyByValue(deviceModel.props[commands.blow.code]).toString());
         //client.publish(mqttTopicPrefix + '/air/get', commands.air.value.getKeyByValue(deviceModel.props[commands.air.code]).toString());
