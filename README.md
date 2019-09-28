@@ -84,25 +84,26 @@ climate:
     payload_off: 0
     payload_on: 1
     modes:
-      - none
-      - auto
-      - cool
-      - dry
-      - wind
-      - heat
+      - "none"
+      - "off"
+      - "auto"
+      - "cool"
+      - "heat"
+      - "dry"
+      - "fan_only"
     swing_modes:
-      - default
-      - full
-      - fixedTop
-      - fixedMidTop
-      - fixedMid
-      - fixedMidBottom
-      - fixedBottom
-      - swingBottom
-      - swingMidBottom
-      - swingMid
-      - swingMidTop
-      - swingTop
+      - "default"
+      - "full"
+      - "fixedTop"
+      - "fixedMidTop"
+      - "fixedMid"
+      - "fixedMidBottom"
+      - "fixedBottom"
+      - "swingBottom"
+      - "swingMidBottom"
+      - "swingMid"
+      - "swingMidTop"
+      - "swingTop"
     fan_modes:
       - l0
       - l1
@@ -121,6 +122,7 @@ climate:
 
 
 ## Changelog
+[1.2] - refresh sources from origin
 [1.1.2.1] - Updated sources from orig 
 
 [1.0.3] - Fixed power off command
