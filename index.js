@@ -13,8 +13,8 @@ const argv = require('minimist')(process.argv.slice(2), {
  * Helper: get property key for value
  * @param {*} value
  */
-function getKeyByValue (object, value) {
-  return Object.keys(object).find(key => object[key] === value)
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
 }
 
 /**
@@ -37,50 +37,50 @@ const deviceState = {
     sleep: null,
     turbo: null,
     mode: null
-  }
+};
 
-  /**
+/**
  * Check if incoming device setting differs from last state and publish change if yes
  * @param {string} stateProp State property to be updated/compared with
  * @param {string} newValue New incoming device state value
  * @param {string} mqttTopic Topic (without prefix) to send with new value
  */
-const publishIfChanged = function (stateProp, newValue, mqttTopic) {
+const publishIfChanged = function(stateProp, newValue, mqttTopic) {
     if (newValue !== deviceState[stateProp]) {
-      deviceState[stateProp] = newValue
-      client.publish(mqttTopicPrefix + mqttTopic, newValue)
+        deviceState[stateProp] = newValue;
+        client.publish(mqttTopicPrefix + mqttTopic, newValue);
     }
-  }
+};
 
 
 const deviceOptions = {
     host: argv['hvac-host'],
     onStatus: (deviceModel) => {
         publishIfChanged('temperature', deviceModel.props["wdNumber"].toString(), '/temperature/get')
-        //client.publish(mqttTopicPrefix + '/temperature/get', deviceModel.props["wdNumber"].toString());
+            //client.publish(mqttTopicPrefix + '/temperature/get', deviceModel.props["wdNumber"].toString());
         publishIfChanged('temperature_in', deviceModel.props[commands.temperature.code].toString(), '/temperature_in/get')
-        //client.publish(mqttTopicPrefix + '/temperature_in/get', deviceModel.props[commands.temperature.code].toString());
+            //client.publish(mqttTopicPrefix + '/temperature_in/get', deviceModel.props[commands.temperature.code].toString());
         publishIfChanged('fanSpeed', getKeyByValue(commands.fanSpeed.value, deviceModel.props[commands.fanSpeed.code]).toString(), '/fanspeed/get')
-        //client.publish(mqttTopicPrefix + '/fanspeed/get', commands.fanSpeed.value.getKeyByValue(deviceModel.props[commands.fanSpeed.code]).toString());
+            //client.publish(mqttTopicPrefix + '/fanspeed/get', commands.fanSpeed.value.getKeyByValue(deviceModel.props[commands.fanSpeed.code]).toString());
         publishIfChanged('power', getKeyByValue(commands.power.value, deviceModel.props[commands.power.code]).toString(), '/power/get')
-        //client.publish(mqttTopicPrefix + '/power/get', commands.power.value.getKeyByValue(deviceModel.props[commands.power.code]).toString());
+            //client.publish(mqttTopicPrefix + '/power/get', commands.power.value.getKeyByValue(deviceModel.props[commands.power.code]).toString());
         publishIfChanged('health', getKeyByValue(commands.health.value, deviceModel.props[commands.health.code]).toString(), '/health/get')
-        //client.publish(mqttTopicPrefix + '/health/get', commands.health.value.getKeyByValue(deviceModel.props[commands.health.code]).toString());
+            //client.publish(mqttTopicPrefix + '/health/get', commands.health.value.getKeyByValue(deviceModel.props[commands.health.code]).toString());
         publishIfChanged('powerSave', getKeyByValue(commands.powerSave.value, deviceModel.props[commands.powerSave.code]).toString(), '/powersave/get')
-        //client.publish(mqttTopicPrefix + '/powersave/get', commands.energySave.value.getKeyByValue(deviceModel.props[commands.energySave.code]).toString());
+            //client.publish(mqttTopicPrefix + '/powersave/get', commands.energySave.value.getKeyByValue(deviceModel.props[commands.energySave.code]).toString());
         publishIfChanged('lights', getKeyByValue(commands.lights.value, deviceModel.props[commands.lights.code]).toString(), '/lights/get')
-        //client.publish(mqttTopicPrefix + '/lights/get', commands.lights.value.getKeyByValue(deviceModel.props[commands.lights.code]).toString());
+            //client.publish(mqttTopicPrefix + '/lights/get', commands.lights.value.getKeyByValue(deviceModel.props[commands.lights.code]).toString());
         publishIfChanged('sleep', getKeyByValue(commands.sleep.value, deviceModel.props[commands.sleep.code]).toString(), '/sleep/get')
-        //client.publish(mqttTopicPrefix + '/sleep/get', commands.sleep.value.getKeyByValue(deviceModel.props[commands.sleep.code]).toString());
- 
+            //client.publish(mqttTopicPrefix + '/sleep/get', commands.sleep.value.getKeyByValue(deviceModel.props[commands.sleep.code]).toString());
+
         /**
          * Handle "off" mode status
          * Hass.io MQTT climate control doesn't support power commands through GUI,
          * so an additional pseudo mode is added
          */
-        const extendedMode = (deviceModel.props[commands.power.code] === commands.power.value.on)
-        ? getKeyByValue(commands.mode.value, deviceModel.props[commands.mode.code]).toString()
-        : 'off'
+        const extendedMode = (deviceModel.props[commands.power.code] === commands.power.value.on) ?
+            getKeyByValue(commands.mode.value, deviceModel.props[commands.mode.code]).toString() :
+            'off'
         publishIfChanged('mode', extendedMode, '/mode/get')
     },
     onUpdate: (deviceModel) => {
@@ -117,10 +117,17 @@ if (argv['mqtt-username'] && argv['mqtt-password']) {
     mqttOptions.password = argv['mqtt-password'];
     authLog = ' as "' + mqttOptions.username + '"';
 }
+debugger;
 const client = mqtt.connect(argv['mqtt-broker-url'], mqttOptions);
 client.on('connect', () => {
     console.log('[MQTT] Connected to broker on ' + argv['mqtt-broker-url'] + authLog);
     hvac = require('./app/deviceFactory').connect(deviceOptions);
+
+    setInterval(x => {
+        console.log("TODO: get status from AC ");
+        debugger;
+        hvac.device.connectToDevice();
+    }, 5000);
 });
 
 client.on('message', (topic, message) => {

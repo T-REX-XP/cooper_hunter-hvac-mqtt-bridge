@@ -93,7 +93,7 @@ module.exports = {
     },
 
     cmd20: function(value) {
-        let arr = []
+        let arr = [];
         for (let i = 0; i < value.length; i++) {
             let val = value.charCodeAt(i);
             arr.push(val);

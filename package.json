@@ -1,27 +1,32 @@
 {
-  "name": "cooper_hunter-hvac-mqtt-bridge",
-  "version": "2.1.2",
-  "description": "MQTT Bridge for controlling Cooper&Hunter smart air conditioners",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "T-REX-XP <4560084+T-REX-XP@users.noreply.github.com>",
-  "license": "MIT",
-  "dependencies": {
-    "crypto-js": "^3.3.0",
-    "lodash": "^4.17.11",
-    "minimist": "^1.2.5",
-    "mqtt": "^2.18.8"
-  },
-  "engines": {
-    "node": ">=8.11.0"
-  },
-  "os": [
-    "darwin",
-    "linux",
-    "win32"
-  ],
-  "private": true
+    "name": "cooper_hunter-hvac-mqtt-bridge",
+    "version": "2.1.2",
+    "description": "MQTT Bridge for controlling Cooper&Hunter smart air conditioners",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "T-REX-XP <4560084+T-REX-XP@users.noreply.github.com>",
+    "license": "MIT",
+    "dependencies": {
+        "crypto-js": "^3.3.0",
+        "lodash": "^4.17.11",
+        "minimist": "^1.2.5",
+        "mqtt": "^2.18.8"
+    },
+    "engines": {
+        "node": ">=8.11.0"
+    },
+    "os": [
+        "darwin",
+        "linux",
+        "win32"
+    ],
+    "private": true,
+    "jshintConfig": {
+        "esversion": 6,
+        "strict": true,
+        "moz": true
+    }
 }

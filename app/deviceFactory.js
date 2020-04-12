@@ -2,7 +2,6 @@
 const net = require('net');
 const dgram = require('dgram');
 const socket = dgram.createSocket('udp4');
-//const encryptionService = require('./encryptionService')();
 const cmd = require('./commandEnums');
 const _ = require('lodash');
 
@@ -67,9 +66,10 @@ class Device {
      * @param {string} address - IP/host address 
      */
     _connectToDevice(address) {
+
         try {
             socket.bind(() => {
-                const bufView = new Buffer(9);
+                const bufView = Buffer.alloc(9);
                 bufView[0] = 0xAA;
                 bufView[1] = 0xAA;
                 bufView[2] = 0x06;
@@ -94,6 +94,10 @@ class Device {
             }, timeout * 1000);
         }
     }
+    connectToDevice() {
+        let address = this.options.host;
+        this._connectTDevice(address);
+    }
 
     /**
      * Register new device locally
@@ -103,54 +107,19 @@ class Device {
      * @param {number} port - Port number
      */
     _setDevice(id, name, address, port) {
-        this.device.id = id;
-        this.device.name = name;
-        this.device.address = address;
-        this.device.port = port;
-        this.device.bound = false;
-        this.device.props = {};
+            this.device.id = id;
+            this.device.name = name;
+            this.device.address = address;
+            this.device.port = port;
+            this.device.bound = false;
+            this.device.props = {};
 
-        console.log('[UDP] New device registered: %s', this.device.name);
-    }
-
-    /**
-     * Send binding request to device
-     * @param {Device} device Device object
-     */
-    _sendBindRequest(device) {
-        /*   const message = {
-            mac: this.device.id,
-            t: 'bind',
-            uid: 0
-        };
-        const encryptedBoundMessage = encryptionService.encrypt(message);
-        const request = {
-            cid: 'app',
-            i: 1,
-            t: 'pack',
-            uid: 0,
-            pack: encryptedBoundMessage
-        };
-        const toSend = Buffer.from(JSON.stringify(request));
-        socket.send(toSend, 0, toSend.length, device.port, device.address);
-        */
-    }
-
-    /**
-     * Confirm device is bound and update device status on list
-     * @param {String} id - Device ID
-     * @param {String} key - Encryption key
-     */
-    _confirmBinding(id, key) {
-        /*this.device.bound = true;
-          this.device.key = key;
-          console.log('[UDP] Device %s is bound!', this.device.name);*/
-    }
-
-    /**
-     * Confirm device is bound and update device status on list
-     * @param {Device} device - Device
-     */
+            console.log('[UDP] New device registered: %s', this.device.name);
+        }
+        /**
+         * Confirm device is bound and update device status on list
+         * @param {Device} device - Device
+         */
     _requestDeviceStatus(device) {
         console.log("--in _requestDeviceStatus");
         let serializedRequest = Buffer.from([0xAA, 0xAA, 0x12, 0xA0, 0x0A, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1A]);
@@ -182,7 +151,6 @@ class Device {
             this._setDevice(message.mac, message.name, rinfo.address, rinfo.port);
             this._requestDeviceStatus(this.device, this);
             this.options.onConnected(this.device);
-            // this._sendBindRequest(this.device);
             return;
         } else {
             console.log("received status msg.");
@@ -204,28 +172,6 @@ class Device {
      */
     _sendCommand(command) {
         client.write(command);
-    };
-
-    /**
-     * Send request to a bound device
-     * @param {object} message
-     * @param {string[]} message.opt
-     * @param {number[]} message.p
-     * @param {string} message.t
-     * @param {string} [address] IP/host address
-     * @param {number} [port] Port number
-     */
-    _sendRequest(message, address = this.device.address, port = this.device.port) {
-        /*  const encryptedMessage = encryptionService.encrypt(message, this.device.key);
-          const request = {
-              cid: 'app',
-              i: 0,
-              t: 'pack',
-              uid: 0,
-              pack: encryptedMessage
-          };
-          const serializedRequest = Buffer.from(JSON.stringify(request));
-          socket.send(serializedRequest, 0, serializedRequest.length, port, address);*/
     };
 
     /**
@@ -257,9 +203,6 @@ class Device {
     setMode(value) {
         console.log('--In setMode: ' + value);
         this._sendCommand(utils.cmd05(this.device.lastCmd, value));
-        //this._sendCommand(
-        //  [cmd.mode.code], [value]
-        //);
     };
 
     /**
