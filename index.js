@@ -117,17 +117,16 @@ if (argv['mqtt-username'] && argv['mqtt-password']) {
     mqttOptions.password = argv['mqtt-password'];
     authLog = ' as "' + mqttOptions.username + '"';
 }
-debugger;
+
 const client = mqtt.connect(argv['mqtt-broker-url'], mqttOptions);
 client.on('connect', () => {
     console.log('[MQTT] Connected to broker on ' + argv['mqtt-broker-url'] + authLog);
     hvac = require('./app/deviceFactory').connect(deviceOptions);
 
     setInterval(x => {
-        console.log("TODO: get status from AC ");
-        debugger;
-        hvac.device.connectToDevice();
-    }, 5000);
+        console.log("--Gget status from AC ");
+        hvac.requestDeviceStatus();
+    }, 15000);
 });
 
 client.on('message', (topic, message) => {

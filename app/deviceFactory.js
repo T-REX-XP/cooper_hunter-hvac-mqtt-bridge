@@ -94,10 +94,6 @@ class Device {
             }, timeout * 1000);
         }
     }
-    connectToDevice() {
-        let address = this.options.host;
-        this._connectTDevice(address);
-    }
 
     /**
      * Register new device locally
@@ -327,6 +323,9 @@ class Device {
                [cmd.turbo.code], [value ? 1 : 0]
            );
            */
+    }
+    requestDeviceStatus() {
+        this._requestDeviceStatus(this.device);
     }
 }
 
