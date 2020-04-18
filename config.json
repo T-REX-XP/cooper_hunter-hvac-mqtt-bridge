@@ -9,23 +9,29 @@
     "hassio_api": true,
     "hassio_role": "default",
     "options": {
-        "hvac_host": "192.168.107.49",
         "interval": 60,
         "mqtt": {
             "broker_url": "mqtt://localhost",
-            "topic_prefix": "home/greehvac",
             "username": "",
             "password": ""
-        }
+        },
+        "devices": [{
+            "hvac_host": "192.168.107.3",
+            "mqtt_topic_prefix": "homeassistant/climate/ac_livingroom"
+        }]
     },
     "schema": {
-        "hvac_host": "str",
+        "hvac_host": "str?",
         "interval": "int",
         "mqtt": {
             "broker_url": "str",
-            "topic_prefix": "str",
+            "topic_prefix": "str?",
             "username": "str?",
             "password": "str?"
-        }
+        },
+        "devices": [{
+            "hvac_host": "str",
+            "mqtt_topic_prefix": "str"
+        }]
     }
 }

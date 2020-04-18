@@ -87,6 +87,7 @@ class Device {
             });
         } catch (err) {
             const timeout = 60;
+            this.isConnected = false;
 
             console.log('[UDP] Unable to connect (' + err.message + '). Retrying in ' + timeout + 's...');
             setTimeout(() => {
@@ -119,11 +120,12 @@ class Device {
     _requestDeviceStatus(device) {
         console.log("--in _requestDeviceStatus");
         let serializedRequest = Buffer.from([0xAA, 0xAA, 0x12, 0xA0, 0x0A, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1A]);
+        let that = this;
 
         if (!this.isConnected) {
             client.connect(this.deviceStatusPort, device.address, function(data) {
                 console.log('Connected to tcp port');
-                this.isConnected = true;
+                that.isConnected = true;
                 client.write(serializedRequest);
             });
         } else {
@@ -157,8 +159,6 @@ class Device {
             this.options.onStatus(this.device);
             return;
         }
-
-        console.log('[UDP] Unknown message of type %s: %s, %s', pack.t, message, pack);
     }
 
     /**
