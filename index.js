@@ -146,18 +146,25 @@ function sendDiscoveryMessage() {
         "temp_cmd_t": mqttTopicPrefix + "/temperature/set",
         "temp_stat_t": mqttTopicPrefix + "/temperature/get",
         "uniq_id": uniqId,
-
-        /* "fan_mode_state_topic": mqttTopicPrefix + "/fanspeed/get",
+        "stat_t": mqttTopicPrefix + "/mode/get",
+        "pl_on": "on",
+        "pl_off": "off",
+        "fan_speed_topic": mqttTopicPrefix + "/fanspeed/get",
+        "fan_speed_list": ["l1", "l2", "l3", "l4", "l5", "l6"],
+        "swing_mode_state_topic": mqttTopicPrefix + "/swingvert/get",
+        "swing_mode_command_topic": mqttTopicPrefix + "/swingvert/set",
+        /* 
          "fan_mode_command_topic": mqttTopicPrefix + "/fanspeed/set",
-         "swing_mode_state_topic": mqttTopicPrefix + "/swingvert/get",
-         "swing_mode_command_topic": mqttTopicPrefix + "/swingvert/set",
+      
+       
          "power_state_topic": mqttTopicPrefix + "/power/get",
          "power_command_topic": mqttTopicPrefix + "/power/set",*/
         //"cmd_t": "home/OpenMQTTGateway_ESP32_BLE/commands/MQTTtoSYS/config",
         "device": {
-            "name": "Nordic Evo 2",
+            "name": "AC Livingroom",
             "manufacturer": "Cooper&Hunter",
-            "sw_version": "v0.1",
+            "sw_version": "v1.0",
+            "model": "Nordic Evo 2",
             "identifiers": [
                 "Ch-s09ftn-e2wf"
             ]
