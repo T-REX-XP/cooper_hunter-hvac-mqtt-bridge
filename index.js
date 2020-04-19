@@ -135,22 +135,42 @@ client.on('connect', () => {
 });
 
 function sendDiscoveryMessage() {
+    let uniqId = "CHac" + deviceOptions.host.replace(/\D/g, '');
     let discoveryObj = {
-        "device_class": "climate",
-        "state_topic": mqttTopicPrefix + "/state",
-        "mode_stat_t": mqttTopicPrefix + "/state",
         "name": "AC Livingroom",
+        //"device_class": "climate",
+        "state_topic": mqttTopicPrefix + "/mode/get",
+        "mode_cmd_t": mqttTopicPrefix + "/mode/set",
+        "mode_stat_t": mqttTopicPrefix + "/mode/get",
         "curr_temp_t": mqttTopicPrefix + "/temperature_in/get",
         "temp_cmd_t": mqttTopicPrefix + "/temperature/set",
         "temp_stat_t": mqttTopicPrefix + "/temperature/get",
-        "mode_state_topic": mqttTopicPrefix + "/mode/get",
-        "mode_command_topic": mqttTopicPrefix + "/mode/set",
+        "uniq_id": uniqId,
+
         "fan_mode_state_topic": mqttTopicPrefix + "/fanspeed/get",
         "fan_mode_command_topic": mqttTopicPrefix + "/fanspeed/set",
         "swing_mode_state_topic": mqttTopicPrefix + "/swingvert/get",
         "swing_mode_command_topic": mqttTopicPrefix + "/swingvert/set",
         "power_state_topic": mqttTopicPrefix + "/power/get",
         "power_command_topic": mqttTopicPrefix + "/power/set",
+        //"cmd_t": "home/OpenMQTTGateway_ESP32_BLE/commands/MQTTtoSYS/config",
+        "device": {
+            "name": "Nordic Evo 2",
+            "manufacturer": "Cooper&Hunter",
+            "sw_version": "v0.1",
+            "identifiers": [
+                "Ch-s09ftn-e2wf"
+            ]
+        },
+        /* "mode_state_topic": mqttTopicPrefix + "/mode/get",
+         "mode_command_topic": mqttTopicPrefix + "/mode/set",
+         "fan_mode_state_topic": mqttTopicPrefix + "/fanspeed/get",
+         "fan_mode_command_topic": mqttTopicPrefix + "/fanspeed/set",
+         "swing_mode_state_topic": mqttTopicPrefix + "/swingvert/get",
+         "swing_mode_command_topic": mqttTopicPrefix + "/swingvert/set",
+         "power_state_topic": mqttTopicPrefix + "/power/get",
+         "power_command_topic": mqttTopicPrefix + "/power/set",
+         */
         "modes": ["off", "heat", "none", "auto", "cool", "dry", "wind"]
     };
     var mqttTopic = "/config";
