@@ -139,7 +139,7 @@ function sendDiscoveryMessage() {
     let discoveryObj = {
         "name": "AC Livingroom",
         //"device_class": "climate",
-        "state_topic": mqttTopicPrefix + "/mode/get",
+        //"state_topic": mqttTopicPrefix + "/mode/get",
         "mode_cmd_t": mqttTopicPrefix + "/mode/set",
         "mode_stat_t": mqttTopicPrefix + "/mode/get",
         "curr_temp_t": mqttTopicPrefix + "/temperature_in/get",
@@ -147,12 +147,12 @@ function sendDiscoveryMessage() {
         "temp_stat_t": mqttTopicPrefix + "/temperature/get",
         "uniq_id": uniqId,
 
-        "fan_mode_state_topic": mqttTopicPrefix + "/fanspeed/get",
-        "fan_mode_command_topic": mqttTopicPrefix + "/fanspeed/set",
-        "swing_mode_state_topic": mqttTopicPrefix + "/swingvert/get",
-        "swing_mode_command_topic": mqttTopicPrefix + "/swingvert/set",
-        "power_state_topic": mqttTopicPrefix + "/power/get",
-        "power_command_topic": mqttTopicPrefix + "/power/set",
+        /* "fan_mode_state_topic": mqttTopicPrefix + "/fanspeed/get",
+         "fan_mode_command_topic": mqttTopicPrefix + "/fanspeed/set",
+         "swing_mode_state_topic": mqttTopicPrefix + "/swingvert/get",
+         "swing_mode_command_topic": mqttTopicPrefix + "/swingvert/set",
+         "power_state_topic": mqttTopicPrefix + "/power/get",
+         "power_command_topic": mqttTopicPrefix + "/power/set",*/
         //"cmd_t": "home/OpenMQTTGateway_ESP32_BLE/commands/MQTTtoSYS/config",
         "device": {
             "name": "Nordic Evo 2",
