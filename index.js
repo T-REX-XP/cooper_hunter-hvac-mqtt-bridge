@@ -5,7 +5,7 @@
 const mqtt = require('mqtt');
 const commands = require('./app/commandEnums');
 const argv = require('minimist')(process.argv.slice(2), {
-    string: ['hvac-host', 'mqtt-broker-url', 'mqtt-topic-prefix', 'mqtt-username', 'mqtt-password', 'interval'],
+    string: ['hvac-host', 'mqtt-broker-url', 'mqtt-topic-prefix', 'mqtt-username', 'mqtt-password', 'interval', 'name'],
     '--': true,
 });
 
@@ -121,23 +121,28 @@ let interval = 60;
 if (argv['interval']) {
     interval = argv['interval'];
 }
+var name = "";
+if (argv['name']) {
+    name = argv['name'];
+}
+
 console.log("brocker: " + argv['mqtt-broker-url']);
 const client = mqtt.connect(argv['mqtt-broker-url'], mqttOptions);
 client.on('connect', () => {
     console.log('[MQTT] Connected to broker on ' + argv['mqtt-broker-url'] + authLog);
     hvac = require('./app/deviceFactory').connect(deviceOptions);
     //TODO: auto discoverty
-    sendDiscoveryMessage();
+    sendDiscoveryMessage(name);
     setInterval(x => {
         console.log("--Get status from AC ");
         hvac.requestDeviceStatus();
     }, interval * 1000);
 });
 
-function sendDiscoveryMessage() {
+function sendDiscoveryMessage(name = "LivingRoom AC") {
     let uniqId = "ChAC" + deviceOptions.host.replace(/\D/g, '');
     let discoveryObj = {
-        "name": "AC Livingroom",
+        "name": name,
         "mode_cmd_t": mqttTopicPrefix + "/mode/set",
         "mode_stat_t": mqttTopicPrefix + "/mode/get",
         "curr_temp_t": mqttTopicPrefix + "/temperature_in/get",

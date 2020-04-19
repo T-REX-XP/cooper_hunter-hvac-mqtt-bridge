@@ -1,6 +1,6 @@
 {
     "name": "Cooper&Huntrer HVAC MQTT bridge",
-    "version": "1.3.6",
+    "version": "1.4.0",
     "slug": "cooper_hunter_hvac_mqtt_bridge",
     "description": "Hass.io addon for controlling Cooper&Huntrer air conditioners using the MQTT climate platform",
     "startup": "application",
@@ -13,6 +13,7 @@
     ],
     "options": {
         "interval": 60,
+        "name": "LivingRoom AC",
         "mqtt": {
             "broker_url": "mqtt://localhost",
             "username": "",
@@ -25,6 +26,7 @@
     },
     "schema": {
         "hvac_host": "str?",
+        "name": "str",
         "interval": "int",
         "mqtt": {
             "broker_url": "str",

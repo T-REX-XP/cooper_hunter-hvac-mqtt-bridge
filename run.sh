@@ -8,6 +8,7 @@ MQTT_BROKER_URL=$(jq -r ".mqtt.broker_url" $CONFIG_PATH)
 MQTT_TOPIC_PREFIX=$(jq -r ".mqtt.topic_prefix" $CONFIG_PATH)
 MQTT_USERNAME=$(jq -r ".mqtt.username" $CONFIG_PATH)
 MQTT_PASSWORD=$(jq -r ".mqtt.password" $CONFIG_PATH)
+NAME=$(jq -r ".name" $CONFIG_PATH)
 
 npm install
 
@@ -16,6 +17,7 @@ INSTANCES=$(jq '.devices | length' $CONFIG_PATH)
 if [ "$INSTANCES" -gt 0 ]; then
 	for i in $(seq 0 $(($INSTANCES - 1))); do
 		HVAC_HOST=$(jq -r ".devices[$i].hvac_host" $CONFIG_PATH);
+		HVAC_NAME=$(jq -r ".devices[$i].name" $CONFIG_PATH);
 		MQTT_TOPIC_PREFIX=$(jq -r ".devices[$i].mqtt_topic_prefix" $CONFIG_PATH);
 		if [[ $HVAC_HOST = null ]]; then echo "[ERROR] Missing hvac_host for device $i. Skipping." && continue; fi
 		if [[ $MQTT_TOPIC_PREFIX = null ]]; then echo "[ERROR] Missing mqtt_topic_prefix for device $i. Skipping." && continue; fi
@@ -25,7 +27,8 @@ if [ "$INSTANCES" -gt 0 ]; then
 			--mqtt-broker-url="${MQTT_BROKER_URL}" \
 			--mqtt-topic-prefix="${MQTT_TOPIC_PREFIX}" \
 			--mqtt-username="${MQTT_USERNAME}" \
-			--mqtt-password="${MQTT_PASSWORD}"
+			--mqtt-password="${MQTT_PASSWORD}" \
+			--name="${HVAC_NAME}"
 	done
 	npx pm2 logs /HVAC_/
 else
@@ -35,5 +38,6 @@ else
 		--mqtt-broker-url="${MQTT_BROKER_URL}" \
 		--mqtt-topic-prefix="${MQTT_TOPIC_PREFIX}" \
 		--mqtt-username="${MQTT_USERNAME}" \
-		--mqtt-password="${MQTT_PASSWORD}"
+		--mqtt-password="${MQTT_PASSWORD}" \
+		--name="${NAME}"
 fi

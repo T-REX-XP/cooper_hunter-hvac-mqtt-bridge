@@ -2,6 +2,28 @@
 
 Bridge service for communicating with Cooper&Hunter(Ch-s09ftn-e2wf) Nordic evo 2 series air conditioners using MQTT broadcasts. It can also be used as a [Hass.io](https://home-assistant.io/) addon.
 
+# Features
+- Supporting mqtt discovery
+- Supporting periodicaly retrieving the status of AC
+- Full support Home Assistant Addons ecosystem
+
+## Original app
+- [https://play.google.com/store/apps/details?id=net.conditioner.web]
+
+## Original Docs 
+- [http://cooperandhunter.com/ua/nordic_evo_two_instruction.pdf]
+
+## How to Unpack
+- [How to Unpack sources from apk](../../wiki/How-to-Unpack-sources-from-apk)
+
+
+## Requirements
+
+- NodeJS (>=8.9.3) with NPM
+- An MQTT broker and Cooper&Hunter smart HVAC device on the same network
+- Docker (for building Hass.io addon)
+
+
 ### Running addon locally
 
 Create an `./data/options.json` file inside the repo with persistent addon configuration.
@@ -21,23 +43,6 @@ docker run --rm -v "$PWD/data":/data cooper_hunter-hvac-mqtt-bridge
     }
 
 ```
-
-
-## Original app
-- [https://play.google.com/store/apps/details?id=net.conditioner.web]
-
-## Original Docs 
-- [http://cooperandhunter.com/ua/nordic_evo_two_instruction.pdf]
-
-## How to Unpack
-- [How to Unpack sources from apk](../../wiki/How-to-Unpack-sources-from-apk)
-
-
-## Requirements
-
-- NodeJS (>=8.9.3) with NPM
-- An MQTT broker and Cooper&Hunter smart HVAC device on the same network
-- Docker (for building Hass.io addon)
 
 ## Running locally
 
@@ -122,6 +127,7 @@ climate:
 
 
 ## Changelog
+[1.4.0] - added mqtt discovery, fix repository structure for the HA addon compatibility, fixed small isuses
 [1.2] - refresh sources from origin
 [1.1.2.1] - Updated sources from orig 
 
