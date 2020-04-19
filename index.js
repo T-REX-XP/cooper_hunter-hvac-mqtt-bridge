@@ -129,56 +129,42 @@ client.on('connect', () => {
     //TODO: auto discoverty
     sendDiscoveryMessage();
     setInterval(x => {
-        console.log("--Gget status from AC ");
+        console.log("--Get status from AC ");
         hvac.requestDeviceStatus();
     }, interval * 1000);
 });
 
 function sendDiscoveryMessage() {
-    let uniqId = "CHac" + deviceOptions.host.replace(/\D/g, '');
+    let uniqId = "ChAC" + deviceOptions.host.replace(/\D/g, '');
     let discoveryObj = {
         "name": "AC Livingroom",
-        //"device_class": "climate",
-        //"state_topic": mqttTopicPrefix + "/mode/get",
         "mode_cmd_t": mqttTopicPrefix + "/mode/set",
         "mode_stat_t": mqttTopicPrefix + "/mode/get",
         "curr_temp_t": mqttTopicPrefix + "/temperature_in/get",
         "temp_cmd_t": mqttTopicPrefix + "/temperature/set",
         "temp_stat_t": mqttTopicPrefix + "/temperature/get",
+        "fan_mode_command_topic": mqttTopicPrefix + "/fanspeed/set",
+        "fan_mode_state_topic": mqttTopicPrefix + "/fanspeed/get",
+        "fan_modes": ["l0", "l1", "l2", "l3", "l4", "l5", "l6"],
+
         "uniq_id": uniqId,
-        //    "stat_t": mqttTopicPrefix + "/mode/get",
         "pl_on": "on",
         "pl_off": "off",
-        "fan_speed_topic": mqttTopicPrefix + "/fanspeed/get",
-        "fan_speed_list": ["l1", "l2", "l3", "l4", "l5", "l6"],
         "swing_mode_state_topic": mqttTopicPrefix + "/swingvert/get",
         "swing_mode_command_topic": mqttTopicPrefix + "/swingvert/set",
-        /* 
-         "fan_mode_command_topic": mqttTopicPrefix + "/fanspeed/set",
-      
-       
-         "power_state_topic": mqttTopicPrefix + "/power/get",
-         "power_command_topic": mqttTopicPrefix + "/power/set",*/
-        //"cmd_t": "home/OpenMQTTGateway_ESP32_BLE/commands/MQTTtoSYS/config",
+        "power_state_topic": mqttTopicPrefix + "/power/get",
+        "power_command_topic": mqttTopicPrefix + "/power/set",
         "device": {
             "name": "AC Livingroom",
             "manufacturer": "Cooper&Hunter",
-            "sw_version": "v1.0",
+            "sw_version": "v1.3",
+            "via_device": "mqtt",
             "model": "Nordic Evo 2",
             "identifiers": [
                 "Ch-s09ftn-e2wf"
             ]
         },
-        /* "mode_state_topic": mqttTopicPrefix + "/mode/get",
-         "mode_command_topic": mqttTopicPrefix + "/mode/set",
-         "fan_mode_state_topic": mqttTopicPrefix + "/fanspeed/get",
-         "fan_mode_command_topic": mqttTopicPrefix + "/fanspeed/set",
-         "swing_mode_state_topic": mqttTopicPrefix + "/swingvert/get",
-         "swing_mode_command_topic": mqttTopicPrefix + "/swingvert/set",
-         "power_state_topic": mqttTopicPrefix + "/power/get",
-         "power_command_topic": mqttTopicPrefix + "/power/set",
-         */
-        "modes": ["off", "heat", "none", "auto", "cool", "dry", "wind"]
+        "modes": ["off", "heat", "auto", "cool", "dry"]
     };
     var mqttTopic = "/config";
     client.publish(mqttTopicPrefix + mqttTopic, JSON.stringify(discoveryObj));

@@ -153,7 +153,7 @@ class Device {
         } else {
             console.log("received status msg.");
             let statusMessage = utils.parseMessage(msg);
-            console.log(statusMessage);
+            //console.log(statusMessage);
             this.device.lastCmd = msg;
             this.device.props = statusMessage;
             this.options.onStatus(this.device);
