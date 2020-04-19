@@ -146,7 +146,7 @@ function sendDiscoveryMessage() {
         "temp_cmd_t": mqttTopicPrefix + "/temperature/set",
         "temp_stat_t": mqttTopicPrefix + "/temperature/get",
         "uniq_id": uniqId,
-        "stat_t": mqttTopicPrefix + "/mode/get",
+        //    "stat_t": mqttTopicPrefix + "/mode/get",
         "pl_on": "on",
         "pl_off": "off",
         "fan_speed_topic": mqttTopicPrefix + "/fanspeed/get",
