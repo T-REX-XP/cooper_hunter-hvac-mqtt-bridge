@@ -20,6 +20,7 @@
             "password": ""
         },
         "devices": [{
+            "name": "AC Livingroom",
             "hvac_host": "192.168.107.3",
             "mqtt_topic_prefix": "homeassistant/climate/ac_livingroom"
         }]
@@ -35,6 +36,7 @@
             "password": "str?"
         },
         "devices": [{
+            "name": "str",
             "hvac_host": "str",
             "mqtt_topic_prefix": "str"
         }]
