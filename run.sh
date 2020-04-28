@@ -10,7 +10,7 @@ MQTT_USERNAME=$(jq -r ".mqtt.username" $CONFIG_PATH)
 MQTT_PASSWORD=$(jq -r ".mqtt.password" $CONFIG_PATH)
 NAME=$(jq -r ".name" $CONFIG_PATH)
 
-#npm install
+npm install
 
 INSTANCES=$(jq '.devices | length' $CONFIG_PATH)
 
