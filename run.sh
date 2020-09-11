@@ -10,7 +10,7 @@ MQTT_USERNAME=$(jq -r ".mqtt.username" $CONFIG_PATH)
 MQTT_PASSWORD=$(jq -r ".mqtt.password" $CONFIG_PATH)
 NAME=$(jq -r ".name" $CONFIG_PATH)
 
-#npm install pm2@latest -g
+npm install pm2@latest -g
 
 INSTANCES=$(jq '.devices | length' $CONFIG_PATH)
 
@@ -22,7 +22,7 @@ if [ "$INSTANCES" -gt 0 ]; then
 		if [[ $HVAC_HOST = null ]]; then echo "[ERROR] Missing hvac_host for device $i. Skipping." && continue; fi
 		if [[ $MQTT_TOPIC_PREFIX = null ]]; then echo "[ERROR] Missing mqtt_topic_prefix for device $i. Skipping." && continue; fi
 		echo "Running instance $i for $HVAC_HOST"
-		node  index.js \
+		pm2 start index.js --silent -m --merge-logs --name="HVAC_${i}" -- \
 			--hvac-host="${HVAC_HOST}" \
 			--mqtt-broker-url="${MQTT_BROKER_URL}" \
 			--mqtt-topic-prefix="${MQTT_TOPIC_PREFIX}" \
@@ -30,6 +30,7 @@ if [ "$INSTANCES" -gt 0 ]; then
 			--mqtt-password="${MQTT_PASSWORD}" \
 			--name="${HVAC_NAME}"
 	done
+	pm2 logs /HVAC_/
 else
 	echo "Running in single-instance mode (DEPRECATED)"
 	node index.js \
