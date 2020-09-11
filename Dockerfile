@@ -13,5 +13,7 @@ COPY . .
 RUN chmod +x run.sh
 RUN npm install
 RUN npm install pm2@latest -g
+RUN npm install pm2@latest
+RUN npm audit fix
 CMD [ "./run.sh" ]
 #ENTRYPOINT [ "./run.sh" ]
