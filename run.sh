@@ -30,7 +30,6 @@ if [ "$INSTANCES" -gt 0 ]; then
 			--mqtt-password="${MQTT_PASSWORD}" \
 			--name="${HVAC_NAME}"
 	done
-	pm2 logs /HVAC_/
 else
 	echo "Running in single-instance mode (DEPRECATED)"
 	node index.js \
