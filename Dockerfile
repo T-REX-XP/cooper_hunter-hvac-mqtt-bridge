@@ -12,5 +12,6 @@ WORKDIR /usr/src/app
 COPY . .
 RUN chmod +x run.sh
 RUN npm install
+RUN npm install pm2@latest -g
 CMD [ "./run.sh" ]
 #ENTRYPOINT [ "./run.sh" ]
